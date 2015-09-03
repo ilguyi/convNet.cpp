@@ -17,13 +17,13 @@ Il Gu Yi
 - 4 types of layers
  - Convolutional layer, Pooling layer, Fully Connected layer, Softmax layer
 - 3 types of activation functions
--- Sigmoid, Tanh, ReLU
+ - Sigmoid, Tanh, ReLU
 - Validation data (extracting randomly from train data)
 - Two cost function (cross entropy or quadratic error)
 - Apply L2-regularization (weight decay)
 - Adjust mini-batch size
 - 2 types of momemtum
--- ordinary momemtum, Nesterov momemtum
+ - ordinary momemtum, Nesterov momemtum
 
 
 # Requirements
@@ -35,14 +35,14 @@ for various calculation based on matrix and vector.
 
 ## Version 0.1 (2015. 09. 03.)
 - 4 types of layers
--- Convolutional layer, Pooling layer, Fully Connected layer, Softmax layer
+ - Convolutional layer, Pooling layer, Fully Connected layer, Softmax layer
 - 3 types of activation functions
--- Sigmoid, Tanh, ReLU
+ - Sigmoid, Tanh, ReLU
 - Validation data (extracting randomly from train data)
 - Two cost function (cross entropy or quadratic error)
 - Apply L2-regularization (weight decay)
 - Adjust mini-batch size
 - 2 types of momemtum
--- ordinary momemtum, Nesterov momemtum
+ - ordinary momemtum, Nesterov momemtum
 
 

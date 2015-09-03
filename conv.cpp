@@ -88,7 +88,6 @@ int main (int argc, char** argv)
         nn.Test(testMNIST_norm, predict, iter);
     }
 
-
     return 0;
 }
 

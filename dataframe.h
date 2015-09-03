@@ -17,8 +17,7 @@ namespace df {
 
 
 //  global variable rng for simplicity
-//boost::random::mt19937 rng(time(0));    //  Pick the Random Number Generator method
-boost::random::mt19937 rng(110);    //  Pick the Random Number Generator method
+boost::random::mt19937 rng(time(0));    //  Pick the Random Number Generator method
 
 
 typedef enum {

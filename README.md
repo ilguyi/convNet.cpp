@@ -15,7 +15,7 @@ Il Gu Yi
 
 # What program can do (version 0.1) (2015. 09. 03.)
 - 4 types of layers
--- Convolutional layer, Pooling layer, Fully Connected layer, Softmax layer
+ - Convolutional layer, Pooling layer, Fully Connected layer, Softmax layer
 - 3 types of activation functions
 -- Sigmoid, Tanh, ReLU
 - Validation data (extracting randomly from train data)

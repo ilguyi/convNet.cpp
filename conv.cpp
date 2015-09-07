@@ -32,7 +32,7 @@ int main (int argc, char** argv)
     //  Reading training data
     DataFrame<unsigned> trainMNIST;
 //  Usage: ReadDataFile(filename, N, dimension, header, target)
-    trainMNIST.ReadDataFile(argv[1], N, dimension, "True", "True");
+    trainMNIST.ReadDataFile(argv[1], N, dimension, "False", "True");
     cout << "Read training data complete" << endl;
 //  trainMNIST.PrintData();
 
@@ -58,7 +58,7 @@ int main (int argc, char** argv)
     //  Reading test data
     DataFrame<unsigned> testMNIST;
     unsigned N_test = nn.GetN_test();
-    testMNIST.ReadDataFile(argv[2], N_test, dimension, "True", "False");
+    testMNIST.ReadDataFile(argv[2], N_test, dimension, "False", "True");
     cout << "Read test data complete" << endl;
 //  testMNIST.PrintData();
 
@@ -77,7 +77,7 @@ int main (int argc, char** argv)
 //  Execute NeuralNetworks
     nn.Initialize();
 
-    for (unsigned iter=0; iter<1; iter++) {
+    for (unsigned iter=0; iter<100; iter++) {
 
 //        nn.Training(trainMNIST_norm, iter);
         nn.Training(trainMNIST_norm, validMNIST_norm, iter);
@@ -85,7 +85,8 @@ int main (int argc, char** argv)
         arma::uvec predict(N_test);
         predict.zeros();
 
-        nn.Test(testMNIST_norm, predict, iter);
+//        nn.Test(testMNIST_norm, predict, iter);
+        nn.TestwithAccuracy(testMNIST_norm, predict, iter);
     }
 
     return 0;

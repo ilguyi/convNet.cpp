@@ -94,7 +94,7 @@ class NeuralNetworks {
         template<typename dataType>
         void Training(df::DataFrame<dataType>& data, const unsigned& step);
         template<typename dataType>
-        void Training(df::DataFrame<dataType>& data, df::DataFrame<dataType>& valid, unsigned& step);
+        void Training(df::DataFrame<dataType>& data, df::DataFrame<dataType>& valid, const unsigned& step);
 
     private:
         template<typename dataType>
@@ -130,7 +130,9 @@ class NeuralNetworks {
 
     public:
         template<typename dataType>
-        void Test(df::DataFrame<dataType>& data, arma::uvec& predict, unsigned& step);
+        void Test(df::DataFrame<dataType>& data, arma::uvec& predict, const unsigned& step);
+        template<typename dataType>
+        void TestwithAccuracy(df::DataFrame<dataType>& valid, arma::uvec& predict, const unsigned& step);
 
 
     private:
@@ -292,14 +294,14 @@ void NeuralNetworks::Initialize() {
     layers[3] = new SoftmaxLayer;
 
     arma::ivec input_dimension(3);
-    input_dimension(0) = 28;
-    input_dimension(1) = 28;
-    input_dimension(2) = 1;
+    input_dimension(0) = 32;
+    input_dimension(1) = 32;
+    input_dimension(2) = 3;
 
     arma::ivec filter_dimension1(3);
     filter_dimension1(0) = 5;
     filter_dimension1(1) = 5;
-    filter_dimension1(2) = 6;
+    filter_dimension1(2) = 3;
 
     arma::ivec pooling_size(2);
     pooling_size(0) = 2;
@@ -311,12 +313,12 @@ void NeuralNetworks::Initialize() {
     filter_dimension2(2) = 10;
 
     arma::ivec hidden(3);
-    hidden(0) = 100;
+    hidden(0) = 20;
     hidden(1) = 1;
     hidden(2) = 1;
 
     arma::ivec num_class (3);
-    num_class(0) = 10;
+    num_class(0) = nnParas.n_class;
     num_class(1) = 1;
     num_class(2) = 1;
 
@@ -436,7 +438,7 @@ void NeuralNetworks::Training(df::DataFrame<dataType>& data, const unsigned& ste
 }
 
 template<typename dataType>
-void NeuralNetworks::Training(df::DataFrame<dataType>& data, df::DataFrame<dataType>& valid, unsigned& step) {
+void NeuralNetworks::Training(df::DataFrame<dataType>& data, df::DataFrame<dataType>& valid, const unsigned& step) {
 
     string parafile = "conv.parameter.";
     NamingFile(parafile);
@@ -702,7 +704,7 @@ void NeuralNetworks::WriteError(const string& filename, const double& error, con
 
 
 template<typename dataType>
-void NeuralNetworks::Test(df::DataFrame<dataType>& data, arma::uvec& predict, unsigned& step) {
+void NeuralNetworks::Test(df::DataFrame<dataType>& data, arma::uvec& predict, const unsigned& step) {
 
     for (unsigned n=0; n<data.GetN(); n++) {
         //  Pick one record
@@ -722,17 +724,53 @@ void NeuralNetworks::Test(df::DataFrame<dataType>& data, arma::uvec& predict, un
     NamingFileStep(predfile, step);
 
     ofstream fsave(predfile.c_str());
-    predict.raw_print(fsave, "predeict test data");
+    predict.raw_print(fsave, "predeict");
     fsave.close();
 }
 
+template<typename dataType>
+void NeuralNetworks::TestwithAccuracy(df::DataFrame<dataType>& data, arma::uvec& predict, const unsigned& step) {
+
+    double accuracy = 0.;
+    for (unsigned n=0; n<nnParas.N_test; n++) {
+
+        //  Pick one record
+        arma::Row<dataType> x = data.GetDataRow(n);
+
+        //  FeedForward learning
+        FeedForward(x);
+
+        //  Predict class
+        arma::uword index;
+        Vector act = ReshapeCubetoVector(layers[nnParas.n_layers-1]->activation);
+        double max_value = act.max(index);
+        predict(n) = index;
+        if ( index != data.GetTarget(n) ) accuracy += 1.;
+    }
+    accuracy /= (double) nnParas.N_test;
+
+    //  Write test data accuracy
+    string accuracyfile = "conv.accuracy.";
+    NamingFileStep(accuracyfile, step);
+    ofstream fsave(accuracyfile.c_str(), fstream::out | fstream::app);
+    fsave << accuracy << endl;
+    fsave.close();
+
+    //  Write prediction result
+    string predfile = "conv.predict.";
+    NamingFileStep(predfile, step);
+
+    ofstream fsave1(predfile.c_str());
+    predict.raw_print(fsave1, "predeict");
+    fsave1.close();
+}
+
+
 
 
 
 
 }
-
-
 
 
 
